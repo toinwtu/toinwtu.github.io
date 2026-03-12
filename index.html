@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>toinwtu | PS1 Analog Station</title>
+    <title>toinwtu | PS1 Analog Station V2</title>
     <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&family=MedievalSharp&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-color: #000000;
-            --accent-red: #990000;
+            --accent-red: #990000; /* Яркий красный */
             --button-bg: #0a0a0a;
             --text-white: #d1d1d1;
         }
@@ -24,117 +24,87 @@
             justify-content: center;
             align-items: center;
             overflow: hidden;
+            /* Основной шрифт для всего сайта */
             font-family: 'MedievalSharp', cursive;
             image-rendering: pixelated;
         }
 
-        /* --- Глобальный Глитч --- */
+        /* --- Эффекты Глитча и Шума --- */
         #global-glitch {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: white;
-            display: none;
-            z-index: 200;
-            opacity: 0.12;
-            pointer-events: none;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: white; display: none; z-index: 200; opacity: 0.12; pointer-events: none;
         }
 
-        /* --- Аналоговый шум (на весь экран) --- */
         .noise {
-            position: fixed;
-            top: -50%; left: -50%; width: 200%; height: 200%;
+            position: fixed; top: -50%; left: -50%; width: 200%; height: 200%;
             background: url('https://upload.wikimedia.org/wikipedia/commons/7/76/Noise_6_2000.png');
-            opacity: 0.07;
-            z-index: 150;
-            pointer-events: none;
+            opacity: 0.07; z-index: 150; pointer-events: none;
             animation: noiseAnim 0.15s steps(2) infinite;
         }
 
-        @keyframes noiseAnim {
-            0% { transform: translate(0,0); }
-            20% { transform: translate(-2%, 1%); }
-            40% { transform: translate(-1%, -2%); }
-            60% { transform: translate(2%, 1%); }
-            80% { transform: translate(1%, -1%); }
-            100% { transform: translate(-1%, 2%); }
-        }
+        @keyframes noiseAnim { 0% { transform: translate(0,0); } 100% { transform: translate(-2%, 2%); } }
 
-        /* --- VHS Сканирующие линии --- */
         .vhs-scanlines {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(to bottom, transparent 0%, rgba(255, 255, 255, 0.02) 50%, transparent 100%);
-            background-size: 100% 12px;
-            z-index: 151;
-            pointer-events: none;
+            background-size: 100% 12px; z-index: 151; pointer-events: none;
             animation: scanlinesMove 15s linear infinite;
         }
 
         @keyframes scanlinesMove { from { background-position: 0 0; } to { background-position: 0 100%; } }
 
-        /* --- HUD Инфо --- */
+        .vignette {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            box-shadow: inset 0 0 180px rgba(0,0,0,0.95); z-index: 152; pointer-events: none;
+        }
+
         .vhs-data {
-            position: fixed;
-            top: 20px; left: 20px;
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-            color: var(--text-white);
-            z-index: 160;
-            opacity: 0.6;
+            position: fixed; top: 20px; left: 20px; font-family: 'Courier New', monospace;
+            font-size: 14px; color: var(--text-white); z-index: 160; opacity: 0.6;
         }
 
         .audio-toggle {
-            position: fixed;
-            top: 20px; right: 20px;
-            font-family: 'Courier New', monospace;
-            font-size: 12px;
-            color: var(--text-white);
-            background: transparent;
-            border: 1px solid #222;
-            padding: 5px 10px;
-            z-index: 160;
-            opacity: 0.4;
-            transition: 0.3s;
+            position: fixed; top: 20px; right: 20px; font-family: 'Courier New', monospace;
+            font-size: 12px; color: var(--text-white); background: transparent;
+            border: 1px solid #222; padding: 5px 10px; z-index: 160; opacity: 0.4; transition: 0.3s;
         }
-
         .audio-toggle:hover { opacity: 1; border-color: var(--accent-red); color: var(--accent-red); }
 
-        /* --- Виньетка --- */
-        .vignette {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            box-shadow: inset 0 0 180px rgba(0,0,0,0.95);
-            z-index: 152;
-            pointer-events: none;
-        }
-
-        /* --- Курсор --- */
         #cursor { width: 10px; height: 10px; background: var(--accent-red); position: fixed; pointer-events: none; z-index: 9999; transform: rotate(45deg); box-shadow: 0 0 10px var(--accent-red); }
 
-        /* --- Контент --- */
+        /* --- Контент (Никнейм) --- */
         .container { position: relative; z-index: 10; text-align: center; }
 
         .nickname-wrap { display: inline-block; position: relative; margin-bottom: 5px; }
         
-        .
-        nickname {
+        .nickname {
+            /* ВОССТАНОВЛЕННЫЙ ГОТИЧЕСКИЙ ШРИФТ */
             font-family: 'UnifrakturCook', cursive;
-            font-size: clamp(3.5rem, 12vw, 6.5rem);
-            color: var(--accent-red);
+            /* ВОССТАНОВЛЕННЫЙ РАЗМЕР И ЦВЕТ */
+            font-size: clamp(4.5rem, 15vw, 8rem); /* Ещё больше */
+            color: var(--accent-red); /* Снова КРАСНЫЙ */
+            text-transform: lowercase;
+            
+            /* ВОССТАНОВЛЕННОЕ СВЕЧЕНИЕ (Глухой красный блюр) */
             filter: blur(2px);
-            text-shadow: 0 0 20px var(--accent-red);
+            text-shadow: 0 0 25px var(--accent-red);
+            
+            /* ВОССТАНОВЛЕННАЯ ПЛАВНОСТЬ */
             transition: all 0.6s ease-in-out;
-            letter-spacing: -1px;
+            letter-spacing: -2px;
         }
 
-        .nickname-wrap:hover .nickname {
+        .
+        nickname-wrap:hover .nickname {
+            /* Плавное "оживление" при наведении */
             filter: blur(0px);
-            transform: scale(1.03);
+            transform: scale(1.02);
+            /* Усиливаем свечение */
             text-shadow: 0 0 35px var(--accent-red), 0 0 5px white;
         }
 
         .ambient-bar { 
-            width: 220px; height: 2px; 
+            width: 250px; height: 2px; 
             background: var(--accent-red); 
             margin: 0 auto 50px auto; 
             box-shadow: 0 0 20px 4px var(--accent-red); 
@@ -142,6 +112,7 @@
             opacity: 0.7; 
         }
 
+        /* --- Кнопки Ссылок --- */
         .links-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; max-width: 800px; }
         
         .link-btn {
@@ -154,8 +125,8 @@
             transform: translateY(-2px); box-shadow: 4px 4px 0px #400; 
         }
 
+        /* --- Футер --- */
         .status-bar { position: fixed; bottom: 50px; font-family: 'Courier New', monospace; font-size: 11px; color: var(--accent-red); letter-spacing: 2px; opacity: 0.6; }
-        
         footer { position: fixed; bottom: 20px; font-size: 10px; opacity: 0.25; font-family: 'Courier New', monospace; }
 
         @media (max-width: 600px) { 
@@ -197,11 +168,10 @@
         </nav>
     </div>
 
-    <div class="status-bar" id="status-text">[SYSTEM: INITIALIZING..
-        .]</div>
+    <div class="status-bar" id="status-text">[SYSTEM: MONITORING]</div>
 
     <footer>
-        &copy; 2026 toinwtu - ANALOG_STATION
+        &copy; 2026 toinwtu - ANALOG_STATION_V2
     </footer>
 
     <script>
@@ -221,10 +191,7 @@
             const delay = Math.random() * 12000 + 6000;
             setTimeout(() => {
                 glitchLayer.style.display = 'block';
-                setTimeout(() => {
-                    glitchLayer.style.display = 'none';
-                    triggerGlitch();
-                }, 80);
+                setTimeout(() => { glitchLayer.style.display = 'none'; triggerGlitch(); }, 80);
             }, delay);
         }
         triggerGlitch();
@@ -255,20 +222,16 @@
         document.getElementById('audio-btn').addEventListener('click', function() {
             if (audioCtx.state === 'suspended') audioCtx.resume();
             if (!noiseSource) {
-                noiseSource = createBrownNoise();
-                noiseSource.start();
-                this.innerText = "AMBIENT: ON";
-                this.style.color = "var(--accent-red)";
+                noiseSource = createBrownNoise(); noiseSource.start();
+                this.innerText = "AMBIENT: ON"; this.style.color = "var(--accent-red)";
             } else {
-                noiseSource.stop();
-                noiseSource = null;
-                this.innerText = "AMBIENT: OFF";
-                this.style.color = "var(--text-white)";
+                noiseSource.stop(); noiseSource = null;
+                this.innerText = "AMBIENT: OFF"; this.style.color = "var(--text-white)";
             }
         });
 
         // Статусы
-        const statuses = ["[MONITORING]", "[STATUS: AWAKE]", "[SIGNAL: STABLE]", "[ANALOG_MODE]", "[DECODING...]"];
+        const statuses = ["[MONITORING]", "[STATUS: AWAKE]", "[SIGNAL: STABLE]", "[VHS_ACTIVE]", "[DECODING...]"];
         let statusIdx = 0;
         setInterval(() => {
             statusIdx = (statusIdx + 1) % statuses.length;
@@ -282,7 +245,7 @@
             cursor.style.top = e.clientY - 5 + 'px';
         });
 
-        // Scramble
+        // Scramble Эффект
         const letters = "†‡XVO□Δ01";
         document.querySelectorAll('.link-btn').forEach(button => {
             let interval = null;
@@ -295,11 +258,10 @@
                         .join("");
                     if(iteration >= event.target.dataset.value.length) clearInterval(interval);
                     iteration += 1/2;
-                    }, 40);
+                }, 40);
             };
             button.onmouseleave = () => { cursor.style.transform = 'rotate(45deg) scale(1)'; };
         });
     </script>
 </body>
 </html>
-        
