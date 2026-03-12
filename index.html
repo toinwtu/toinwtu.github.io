@@ -28,7 +28,7 @@
             image-rendering: pixelated;
         }
 
-        /* --- ПОМЕХИ --- */
+        /* --- ЭФФЕКТЫ --- */
         .noise {
             position: fixed; top: -50%; left: -50%; width: 200%; height: 200%;
             background: url('https://upload.wikimedia.org/wikipedia/commons/7/76/Noise_6_2000.png');
@@ -36,10 +36,7 @@
             animation: noiseAnim 0.1s steps(2) infinite;
         }
 
-        @keyframes noiseAnim {
-            0% { transform: translate(0,0); }
-            100% { transform: translate(-1%, 1%); }
-        }
+        @keyframes noiseAnim { 0% { transform: translate(0,0); } 100% { transform: translate(-1%, 1%); } }
 
         .vhs-scanlines {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -67,28 +64,22 @@
             font-size: 12px; background: transparent; border: 1px solid #222; padding: 5px 10px; color: white; cursor: pointer; opacity: 0.6;
         }
 
-        /* --- КОНТЕНТ С ЛЕГКИМ БЛЮРОМ --- */
-        .content-layer {
-            text-align: center;
-            z-index: 10;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+        /* --- КОНТЕНТ --- */
+        .content-layer { text-align: center; z-index: 10; display: flex; flex-direction: column; align-items: center; }
 
         .nickname {
             font-family: 'UnifrakturCook', cursive;
             font-size: clamp(4rem, 15vw, 8.5rem);
             color: var(--accent-red);
-            text-shadow: 0 0 25px var(--accent-red);
+            text-shadow: 0 0 20px var(--accent-red), 0 0 40px rgba(153, 0, 0, 0.5);
             transition: 0.5s;
             letter-spacing: -2px;
             margin-bottom: 5px;
             text-transform: lowercase;
-            filter: blur(1.5px); /* Умеренный блюр для ника */
+            filter: blur(1.7px); /* Твой блюр 1.7 */
         }
 
-        .nickname:hover { filter: blur(0px); text-shadow: 0 0 40px var(--accent-red), 0 0 5px white; }
+        .nickname:hover { filter: blur(0px); text-shadow: 0 0 50px var(--accent-red); transform: scale(1.02); }
 
         .ambient-bar { 
             width: 200px; height: 2px; background: var(--accent-red); 
@@ -96,11 +87,10 @@
             filter: blur(2px); opacity: 0.7; 
         }
 
-        /* КНОПКИ С МИНИМАЛЬНЫМ БЛЮРОМ */
         .links-container { 
             display: flex; flex-wrap: wrap; justify-content: center; 
             gap: 12px; max-width: 800px; padding: 0 20px;
-            filter: blur(0.8px); /* Почти незаметный блюр */
+            filter: blur(0.8px);
         }
         
         .link-btn {
@@ -111,11 +101,13 @@
         
         .link-btn:hover { color: var(--text-white); border-color: var(--accent-red); filter: blur(0px); }
 
-        #cursor { 
-            width: 10px; height: 10px; background: var(--accent-red); position: fixed; 
-            pointer-events: none; z-index: 9999; transform: rotate(45deg); 
-            box-shadow: 0 0 10px var(--accent-red); 
+        /* --- ФУТЕР (ТОЛЬКО НИКНЕЙМ) --- */
+        footer { 
+            position: fixed; bottom: 20px; font-size: 10px; opacity: 0.25; 
+            font-family: 'Courier New', monospace; letter-spacing: 1px; z-index: 160;
         }
+
+        #cursor { width: 10px; height: 10px; background: var(--accent-red); position: fixed; pointer-events: none; z-index: 9999; transform: rotate(45deg); box-shadow: 0 0 10px var(--accent-red); }
 
         @media (max-width: 600px) { 
             .links-container { display: grid; grid-template-columns: 1fr 1fr; width: 95%; filter: blur(0.6px); } 
@@ -152,6 +144,10 @@
             <a href="https://genius.com/artists/Toinwtu08" target="_blank" class="link-btn" data-value="Genius">Genius</a>
         </nav>
     </div>
+
+    <footer>
+        © 2026 toinwtu
+    </footer>
 
     <script>
         function updateClock() {
