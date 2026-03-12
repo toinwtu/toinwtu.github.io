@@ -28,17 +28,7 @@
             image-rendering: pixelated;
         }
 
-        /* --- Слой глобального блюра на контент --- */
-        .blur-layer {
-            filter: blur(1.8px); /* Слегка усилил для атмосферы */
-            text-align: center;
-            z-index: 10;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        /* --- ШУМ И ПОМЕХИ (Форсировано для всех устройств) --- */
+        /* --- ПОМЕХИ --- */
         .noise {
             position: fixed; top: -50%; left: -50%; width: 200%; height: 200%;
             background: url('https://upload.wikimedia.org/wikipedia/commons/7/76/Noise_6_2000.png');
@@ -48,8 +38,7 @@
 
         @keyframes noiseAnim {
             0% { transform: translate(0,0); }
-            50% { transform: translate(-1%, 1%); }
-            100% { transform: translate(1%, -1%); }
+            100% { transform: translate(-1%, 1%); }
         }
 
         .vhs-scanlines {
@@ -72,17 +61,21 @@
         }
 
         /* --- HUD --- */
-        .vhs-data, .audio-toggle {
-            position: fixed; z-index: 160; font-family: 'Courier New', monospace;
-            opacity: 0.6; filter: none !important; /* Время не блюрим */
-        }
-        .vhs-data { top: 20px; left: 20px; font-size: 14px; text-align: left; }
+        .vhs-data { position: fixed; top: 20px; left: 20px; z-index: 160; font-family: 'Courier New', monospace; opacity: 0.6; font-size: 14px; }
         .audio-toggle { 
-            top: 20px; right: 20px; font-size: 12px; background: transparent; 
-            border: 1px solid #222; padding: 5px 10px; color: white; cursor: pointer;
+            position: fixed; top: 20px; right: 20px; z-index: 160; font-family: 'Courier New', monospace;
+            font-size: 12px; background: transparent; border: 1px solid #222; padding: 5px 10px; color: white; cursor: pointer; opacity: 0.6;
         }
 
-        /* --- НИКНЕЙМ --- */
+        /* --- КОНТЕНТ С ЛЕГКИМ БЛЮРОМ --- */
+        .content-layer {
+            text-align: center;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
         .nickname {
             font-family: 'UnifrakturCook', cursive;
             font-size: clamp(4rem, 15vw, 8.5rem);
@@ -92,12 +85,10 @@
             letter-spacing: -2px;
             margin-bottom: 5px;
             text-transform: lowercase;
+            filter: blur(1.5px); /* Умеренный блюр для ника */
         }
 
-        .nickname:hover {
-            filter: blur(0px);
-            text-shadow: 0 0 40px var(--accent-red), 0 0 5px white;
-        }
+        .nickname:hover { filter: blur(0px); text-shadow: 0 0 40px var(--accent-red), 0 0 5px white; }
 
         .ambient-bar { 
             width: 200px; height: 2px; background: var(--accent-red); 
@@ -105,10 +96,11 @@
             filter: blur(2px); opacity: 0.7; 
         }
 
-        /* --- КНОПКИ --- */
+        /* КНОПКИ С МИНИМАЛЬНЫМ БЛЮРОМ */
         .links-container { 
             display: flex; flex-wrap: wrap; justify-content: center; 
             gap: 12px; max-width: 800px; padding: 0 20px;
+            filter: blur(0.8px); /* Почти незаметный блюр */
         }
         
         .link-btn {
@@ -117,10 +109,7 @@
             transition: 0.2s; min-width: 140px; text-transform: uppercase;
         }
         
-        .link-btn:hover { 
-            color: var(--text-white); border-color: var(--accent-red); 
-            filter: blur(0px);
-        }
+        .link-btn:hover { color: var(--text-white); border-color: var(--accent-red); filter: blur(0px); }
 
         #cursor { 
             width: 10px; height: 10px; background: var(--accent-red); position: fixed; 
@@ -129,10 +118,9 @@
         }
 
         @media (max-width: 600px) { 
-            .links-container { display: grid; grid-template-columns: 1fr 1fr; width: 95%; } 
+            .links-container { display: grid; grid-template-columns: 1fr 1fr; width: 95%; filter: blur(0.6px); } 
             #cursor { display: none; } 
             .nickname { font-size: 4.5rem; }
-            .blur-layer { filter: blur(1.2px); } /* Чуть меньше блюра для мелких экранов */
         }
     </style>
 </head>
@@ -145,10 +133,9 @@
     
     <div class="vhs-data" id="vhs-clock"></div>
     <button class="audio-toggle" id="audio-btn">AMBIENT: OFF</button>
-    
     <div id="cursor"></div>
 
-    <div class="blur-layer">
+    <div class="content-layer">
         <h1 class="nickname">toinwtu</h1>
         <div class="ambient-bar"></div>
 
@@ -167,7 +154,6 @@
     </div>
 
     <script>
-        // Часы
         function updateClock() {
             const now = new Date();
             const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
@@ -177,7 +163,6 @@
         }
         setInterval(updateClock, 1000); updateClock();
 
-        // Глитч
         const glitchLayer = document.getElementById('global-glitch');
         function triggerGlitch() {
             setTimeout(() => {
@@ -187,7 +172,6 @@
         }
         triggerGlitch();
 
-        // Звук
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         let noiseSource = null;
         function createBrownNoise() {
@@ -220,14 +204,12 @@
             }
         });
 
-        // Курсор
         const cursor = document.getElementById('cursor');
         document.addEventListener('mousemove', (e) => {
             cursor.style.left = e.clientX - 5 + 'px';
             cursor.style.top = e.clientY - 5 + 'px';
         });
 
-        // Scramble
         const letters = "†‡XVO□Δ01";
         document.querySelectorAll('.link-btn').forEach(button => {
             let interval = null;
