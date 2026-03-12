@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>toinwtu | PS1 Analog Station V2</title>
+    <title>toinwtu</title>
     <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&family=MedievalSharp&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-color: #000000;
-            --accent-red: #990000; /* Яркий красный */
+            --accent-red: #990000;
             --button-bg: #0a0a0a;
             --text-white: #d1d1d1;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             background-color: var(--bg-color);
@@ -24,115 +24,115 @@
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            /* Основной шрифт для всего сайта */
             font-family: 'MedievalSharp', cursive;
             image-rendering: pixelated;
         }
 
-        /* --- Эффекты Глитча и Шума --- */
-        #global-glitch {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: white; display: none; z-index: 200; opacity: 0.12; pointer-events: none;
+        /* --- Слой глобального блюра на контент --- */
+        .blur-layer {
+            filter: blur(1.8px); /* Слегка усилил для атмосферы */
+            text-align: center;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
+        /* --- ШУМ И ПОМЕХИ (Форсировано для всех устройств) --- */
         .noise {
             position: fixed; top: -50%; left: -50%; width: 200%; height: 200%;
             background: url('https://upload.wikimedia.org/wikipedia/commons/7/76/Noise_6_2000.png');
-            opacity: 0.07; z-index: 150; pointer-events: none;
-            animation: noiseAnim 0.15s steps(2) infinite;
+            opacity: 0.09; z-index: 150; pointer-events: none;
+            animation: noiseAnim 0.1s steps(2) infinite;
         }
 
-        @keyframes noiseAnim { 0% { transform: translate(0,0); } 100% { transform: translate(-2%, 2%); } }
+        @keyframes noiseAnim {
+            0% { transform: translate(0,0); }
+            50% { transform: translate(-1%, 1%); }
+            100% { transform: translate(1%, -1%); }
+        }
 
         .vhs-scanlines {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to bottom, transparent 0%, rgba(255, 255, 255, 0.02) 50%, transparent 100%);
-            background-size: 100% 12px; z-index: 151; pointer-events: none;
-            animation: scanlinesMove 15s linear infinite;
+            background: linear-gradient(to bottom, transparent 0%, rgba(255, 255, 255, 0.03) 50%, transparent 100%);
+            background-size: 100% 8px; z-index: 151; pointer-events: none;
+            animation: scanlinesMove 10s linear infinite;
         }
 
         @keyframes scanlinesMove { from { background-position: 0 0; } to { background-position: 0 100%; } }
 
         .vignette {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            box-shadow: inset 0 0 180px rgba(0,0,0,0.95); z-index: 152; pointer-events: none;
+            box-shadow: inset 0 0 180px rgba(0,0,0,0.9); z-index: 152; pointer-events: none;
         }
 
-        .vhs-data {
-            position: fixed; top: 20px; left: 20px; font-family: 'Courier New', monospace;
-            font-size: 14px; color: var(--text-white); z-index: 160; opacity: 0.6;
+        #global-glitch {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: white; display: none; z-index: 200; opacity: 0.1; pointer-events: none;
         }
 
-        .audio-toggle {
-            position: fixed; top: 20px; right: 20px; font-family: 'Courier New', monospace;
-            font-size: 12px; color: var(--text-white); background: transparent;
-            border: 1px solid #222; padding: 5px 10px; z-index: 160; opacity: 0.4; transition: 0.3s;
+        /* --- HUD --- */
+        .vhs-data, .audio-toggle {
+            position: fixed; z-index: 160; font-family: 'Courier New', monospace;
+            opacity: 0.6; filter: none !important; /* Время не блюрим */
         }
-        .audio-toggle:hover { opacity: 1; border-color: var(--accent-red); color: var(--accent-red); }
+        .vhs-data { top: 20px; left: 20px; font-size: 14px; text-align: left; }
+        .audio-toggle { 
+            top: 20px; right: 20px; font-size: 12px; background: transparent; 
+            border: 1px solid #222; padding: 5px 10px; color: white; cursor: pointer;
+        }
 
-        #cursor { width: 10px; height: 10px; background: var(--accent-red); position: fixed; pointer-events: none; z-index: 9999; transform: rotate(45deg); box-shadow: 0 0 10px var(--accent-red); }
-
-        /* --- Контент (Никнейм) --- */
-        .container { position: relative; z-index: 10; text-align: center; }
-
-        .nickname-wrap { display: inline-block; position: relative; margin-bottom: 5px; }
-        
+        /* --- НИКНЕЙМ --- */
         .nickname {
-            /* ВОССТАНОВЛЕННЫЙ ГОТИЧЕСКИЙ ШРИФТ */
             font-family: 'UnifrakturCook', cursive;
-            /* ВОССТАНОВЛЕННЫЙ РАЗМЕР И ЦВЕТ */
-            font-size: clamp(4.5rem, 15vw, 8rem); /* Ещё больше */
-            color: var(--accent-red); /* Снова КРАСНЫЙ */
-            text-transform: lowercase;
-            
-            /* ВОССТАНОВЛЕННОЕ СВЕЧЕНИЕ (Глухой красный блюр) */
-            filter: blur(2px);
+            font-size: clamp(4rem, 15vw, 8.5rem);
+            color: var(--accent-red);
             text-shadow: 0 0 25px var(--accent-red);
-            
-            /* ВОССТАНОВЛЕННАЯ ПЛАВНОСТЬ */
-            transition: all 0.6s ease-in-out;
+            transition: 0.5s;
             letter-spacing: -2px;
+            margin-bottom: 5px;
+            text-transform: lowercase;
         }
 
-        .
-        nickname-wrap:hover .nickname {
-            /* Плавное "оживление" при наведении */
+        .nickname:hover {
             filter: blur(0px);
-            transform: scale(1.02);
-            /* Усиливаем свечение */
-            text-shadow: 0 0 35px var(--accent-red), 0 0 5px white;
+            text-shadow: 0 0 40px var(--accent-red), 0 0 5px white;
         }
 
         .ambient-bar { 
-            width: 250px; height: 2px; 
-            background: var(--accent-red); 
-            margin: 0 auto 50px auto; 
-            box-shadow: 0 0 20px 4px var(--accent-red); 
-            filter: blur(3px); 
-            opacity: 0.7; 
+            width: 200px; height: 2px; background: var(--accent-red); 
+            margin: 0 auto 40px auto; box-shadow: 0 0 20px 4px var(--accent-red); 
+            filter: blur(2px); opacity: 0.7; 
         }
 
-        /* --- Кнопки Ссылок --- */
-        .links-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; max-width: 800px; }
+        /* --- КНОПКИ --- */
+        .links-container { 
+            display: flex; flex-wrap: wrap; justify-content: center; 
+            gap: 12px; max-width: 800px; padding: 0 20px;
+        }
         
         .link-btn {
-            background: var(--button-bg); color: #777; text-decoration: none; padding: 12px 18px; font-size: 0.85rem;
-            border: 1px solid #151515; transition: all 0.1s steps(2); min-width: 140px; text-transform: uppercase;
+            background: var(--button-bg); color: #777; text-decoration: none; 
+            padding: 12px 18px; font-size: 0.8rem; border: 1px solid #151515; 
+            transition: 0.2s; min-width: 140px; text-transform: uppercase;
         }
         
         .link-btn:hover { 
             color: var(--text-white); border-color: var(--accent-red); 
-            transform: translateY(-2px); box-shadow: 4px 4px 0px #400; 
+            filter: blur(0px);
         }
 
-        /* --- Футер --- */
-        .status-bar { position: fixed; bottom: 50px; font-family: 'Courier New', monospace; font-size: 11px; color: var(--accent-red); letter-spacing: 2px; opacity: 0.6; }
-        footer { position: fixed; bottom: 20px; font-size: 10px; opacity: 0.25; font-family: 'Courier New', monospace; }
+        #cursor { 
+            width: 10px; height: 10px; background: var(--accent-red); position: fixed; 
+            pointer-events: none; z-index: 9999; transform: rotate(45deg); 
+            box-shadow: 0 0 10px var(--accent-red); 
+        }
 
         @media (max-width: 600px) { 
-            .links-container { display: grid; grid-template-columns: 1fr 1fr; } 
-            #cursor, .vhs-data, .audio-toggle, .vhs-scanlines { display: none; } 
-            * { cursor: auto; } 
+            .links-container { display: grid; grid-template-columns: 1fr 1fr; width: 95%; } 
+            #cursor { display: none; } 
+            .nickname { font-size: 4.5rem; }
+            .blur-layer { filter: blur(1.2px); } /* Чуть меньше блюра для мелких экранов */
         }
     </style>
 </head>
@@ -148,10 +148,8 @@
     
     <div id="cursor"></div>
 
-    <div class="container">
-        <div class="nickname-wrap">
-            <h1 class="nickname">toinwtu</h1>
-        </div>
+    <div class="blur-layer">
+        <h1 class="nickname">toinwtu</h1>
         <div class="ambient-bar"></div>
 
         <nav class="links-container">
@@ -168,14 +166,8 @@
         </nav>
     </div>
 
-    <div class="status-bar" id="status-text">[SYSTEM: MONITORING]</div>
-
-    <footer>
-        &copy; 2026 toinwtu - ANALOG_STATION_V2
-    </footer>
-
     <script>
-        // VHS Часы
+        // Часы
         function updateClock() {
             const now = new Date();
             const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
@@ -185,21 +177,19 @@
         }
         setInterval(updateClock, 1000); updateClock();
 
-        // Рандомный Глитч
+        // Глитч
         const glitchLayer = document.getElementById('global-glitch');
         function triggerGlitch() {
-            const delay = Math.random() * 12000 + 6000;
             setTimeout(() => {
                 glitchLayer.style.display = 'block';
-                setTimeout(() => { glitchLayer.style.display = 'none'; triggerGlitch(); }, 80);
-            }, delay);
+                setTimeout(() => { glitchLayer.style.display = 'none'; triggerGlitch(); }, 60);
+            }, Math.random() * 8000 + 3000);
         }
         triggerGlitch();
 
-        // Низкочастотный гул (Brownian Noise)
+        // Звук
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         let noiseSource = null;
-
         function createBrownNoise() {
             const bufferSize = 2 * audioCtx.sampleRate;
             const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
@@ -209,12 +199,12 @@
                 const white = Math.random() * 2 - 1;
                 output[i] = (lastOut + (0.02 * white)) / 1.02;
                 lastOut = output[i];
-                output[i] *= 3.5;
+                output[i] *= 4;
             }
             const node = audioCtx.createBufferSource();
             node.buffer = buffer; node.loop = true;
             const gain = audioCtx.createGain();
-            gain.gain.value = 0.05;
+            gain.gain.value = 0.07;
             node.connect(gain); gain.connect(audioCtx.destination);
             return node;
         }
@@ -226,17 +216,9 @@
                 this.innerText = "AMBIENT: ON"; this.style.color = "var(--accent-red)";
             } else {
                 noiseSource.stop(); noiseSource = null;
-                this.innerText = "AMBIENT: OFF"; this.style.color = "var(--text-white)";
+                this.innerText = "AMBIENT: OFF"; this.style.color = "white";
             }
         });
-
-        // Статусы
-        const statuses = ["[MONITORING]", "[STATUS: AWAKE]", "[SIGNAL: STABLE]", "[VHS_ACTIVE]", "[DECODING...]"];
-        let statusIdx = 0;
-        setInterval(() => {
-            statusIdx = (statusIdx + 1) % statuses.length;
-            document.getElementById('status-text').innerText = statuses[statusIdx];
-        }, 5000);
 
         // Курсор
         const cursor = document.getElementById('cursor');
@@ -245,12 +227,11 @@
             cursor.style.top = e.clientY - 5 + 'px';
         });
 
-        // Scramble Эффект
+        // Scramble
         const letters = "†‡XVO□Δ01";
         document.querySelectorAll('.link-btn').forEach(button => {
             let interval = null;
             button.onmouseenter = event => {
-                cursor.style.transform = 'rotate(225deg) scale(2)';
                 let iteration = 0; clearInterval(interval);
                 interval = setInterval(() => {
                     event.target.innerText = event.target.innerText.split("")
@@ -260,7 +241,6 @@
                     iteration += 1/2;
                 }, 40);
             };
-            button.onmouseleave = () => { cursor.style.transform = 'rotate(45deg) scale(1)'; };
         });
     </script>
 </body>
