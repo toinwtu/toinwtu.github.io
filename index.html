@@ -28,7 +28,7 @@
             image-rendering: pixelated;
         }
 
-        /* --- Глобальный Глитч (вспышка) --- */
+        /* --- Глобальный Глитч --- */
         #global-glitch {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -44,8 +44,8 @@
             position: fixed;
             top: -50%; left: -50%; width: 200%; height: 200%;
             background: url('https://upload.wikimedia.org/wikipedia/commons/7/76/Noise_6_2000.png');
-            opacity: 0.07; /* Увеличил видимость шума */
-            z-index: 150; /* Поверх контента */
+            opacity: 0.07;
+            z-index: 150;
             pointer-events: none;
             animation: noiseAnim 0.15s steps(2) infinite;
         }
@@ -114,11 +114,11 @@
         /* --- Контент --- */
         .container { position: relative; z-index: 10; text-align: center; }
 
-        .
-nickname-wrap { display: inline-block; position: relative; margin-bottom: 5px; }
+        .nickname-wrap { display: inline-block; position: relative; margin-bottom: 5px; }
         
-        .nickname {
-            font-family: 'UnifrakturCook', cursive; /* Вернул старый шрифт */
+        .
+        nickname {
+            font-family: 'UnifrakturCook', cursive;
             font-size: clamp(3.5rem, 12vw, 6.5rem);
             color: var(--accent-red);
             filter: blur(2px);
@@ -184,20 +184,21 @@ nickname-wrap { display: inline-block; position: relative; margin-bottom: 5px; }
         <div class="ambient-bar"></div>
 
         <nav class="links-container">
-            <a href="#" class="link-btn" data-value="Spotify">Spotify</a>
-            <a href="#" class="link-btn" data-value="Apple Music">Apple Music</a>
-            <a href="#" class="link-btn" data-value="Yandex Music">Yandex Music</a>
-            <a href="#" class="link-btn" data-value="SoundCloud">SoundCloud</a>
-            <a href="#" class="link-btn" data-value="YouTube Music">YT Music</a>
-            <a href="#" class="link-btn" data-value="YouTube">YouTube</a>
-            <a href="#" class="link-btn" data-value="Telegram">Telegram</a>
-            <a href="#" class="link-btn" data-value="Instagram">Instagram</a>
-            <a href="#" class="link-btn" data-value="TikTok">TikTok</a>
-            <a href="#" class="link-btn" data-value="Genius">Genius</a>
+            <a href="https://open.spotify.com/artist/4RBrmX9POPcj2OKXfeoziF?si=2Vb1BShLTsyQ7rwkBtzrJQ" target="_blank" class="link-btn" data-value="Spotify">Spotify</a>
+            <a href="https://music.apple.com/tr/artist/toinwtu/1678068316" target="_blank" class="link-btn" data-value="Apple Music">Apple Music</a>
+            <a href="https://music.yandex.ru/artist/18960562?utm_source=web&utm_medium=copy_link" target="_blank" class="link-btn" data-value="Yandex Music">Yandex</a>
+            <a href="https://soundcloud.com/toinwtu-music?ref=clipboard&p=i&c=0&si=2D7E830DF6E7402B9649F666EB21C1D4&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing" target="_blank" class="link-btn" data-value="SoundCloud">SoundCloud</a>
+            <a href="https://www.youtube.com/channel/UCPbx5snYNq4V01RgidKUCqw" target="_blank" class="link-btn" data-value="YouTube Music">YT Music</a>
+            <a href="https://www.youtube.com/@toinwtu" target="_blank" class="link-btn" data-value="YouTube">YouTube</a>
+            <a href="https://t.me/toinwtu" target="_blank" class="link-btn" data-value="Telegram">Telegram</a>
+            <a href="https://www.instagram.com/toinwtu?igsh=MW4yNnJ4NHVwbHZrcQ%3D%3D&utm_source=qr" target="_blank" class="link-btn" data-value="Instagram">Instagram</a>
+            <a href="https://www.tiktok.com/@toinwtu.mp3?_r=1&_t=ZS-94cyTRYi7x1" target="_blank" class="link-btn" data-value="TikTok">TikTok</a>
+            <a href="https://genius.com/artists/Toinwtu08" target="_blank" class="link-btn" data-value="Genius">Genius</a>
         </nav>
     </div>
 
-    <div class="status-bar" id="status-text">[SYSTEM: INITIALIZING...]</div>
+    <div class="status-bar" id="status-text">[SYSTEM: INITIALIZING..
+        .]</div>
 
     <footer>
         &copy; 2026 toinwtu - ANALOG_STATION
@@ -212,7 +213,7 @@ nickname-wrap { display: inline-block; position: relative; margin-bottom: 5px; }
             const date = months[now.getMonth()] + ". " + now.getDate() + " " + now.getFullYear();
             document.getElementById('vhs-clock').innerHTML = date + "<br>PLAY ▶ " + time;
         }
-setInterval(updateClock, 1000); updateClock();
+        setInterval(updateClock, 1000); updateClock();
 
         // Рандомный Глитч
         const glitchLayer = document.getElementById('global-glitch');
@@ -294,10 +295,11 @@ setInterval(updateClock, 1000); updateClock();
                         .join("");
                     if(iteration >= event.target.dataset.value.length) clearInterval(interval);
                     iteration += 1/2;
-                }, 40);
+                    }, 40);
             };
             button.onmouseleave = () => { cursor.style.transform = 'rotate(45deg) scale(1)'; };
         });
     </script>
 </body>
 </html>
+        
